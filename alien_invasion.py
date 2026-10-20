@@ -1,7 +1,10 @@
 """Run the Alien Invasion game."""
 
 import sys
+
 import pygame
+
+from settings import Settings
 
 
 class AlienInvasion:
@@ -11,8 +14,23 @@ class AlienInvasion:
         """Initialize the game and create game resources."""
         pygame.init()
 
-        self.screen = pygame.display.set_mode((1200, 800))
-        pygame.display.set_caption("Alien Invasion")
+        self.settings = Settings()
+
+        self.screen = pygame.display.set_mode(
+            (self.settings.screen_width, self.settings.screen_height)
+        )
+        pygame.display.set_caption(self.settings.caption)
+
+        self.background = pygame.image.load(
+            str(self.settings.background_image)
+        ).convert()
+
+        self.background = pygame.transform.scale(
+            self.background,
+            (self.settings.screen_width, self.settings.screen_height)
+        )
+
+        self.clock = pygame.time.Clock()
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -22,7 +40,9 @@ class AlienInvasion:
                     pygame.quit()
                     sys.exit()
 
+            self.screen.blit(self.background, (0, 0))
             pygame.display.flip()
+            self.clock.tick(self.settings.fps)
 
 
 if __name__ == '__main__':
