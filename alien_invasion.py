@@ -5,34 +5,38 @@ import sys
 import pygame
 
 from settings import Settings
+from ship import Ship
 
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the game and create game resources."""
         pygame.init()
 
         self.settings = Settings()
 
+        # Set up the game window
         self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height)
+            (self.settings.screen_w, self.settings.screen_h)
         )
-        pygame.display.set_caption(self.settings.caption)
+        pygame.display.set_caption(self.settings.name)
 
+        # Load the background image
         self.background = pygame.image.load(
-            str(self.settings.background_image)
+            str(self.settings.bg_file)
         ).convert()
 
         self.background = pygame.transform.scale(
             self.background,
-            (self.settings.screen_width, self.settings.screen_height)
+            (self.settings.screen_w, self.settings.screen_h)
         )
 
         self.clock = pygame.time.Clock()
+        self.ship = Ship(self)
 
-    def run_game(self):
+    def run_game(self) -> None:
         """Start the main loop for the game."""
         while True:
             for event in pygame.event.get():
@@ -41,8 +45,9 @@ class AlienInvasion:
                     sys.exit()
 
             self.screen.blit(self.background, (0, 0))
+            self.ship.draw()
             pygame.display.flip()
-            self.clock.tick(self.settings.fps)
+            self.clock.tick(self.settings.FPS)
 
 
 if __name__ == '__main__':

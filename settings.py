@@ -4,12 +4,18 @@ from pathlib import Path
 class Settings:
     """Store settings for Alien Invasion."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the game's settings."""
-        self.screen_width = 1200
-        self.screen_height = 800
-        self.caption = "Alien Invasion"
-        self.fps = 60
+        # Game window settings
+        self.name: str = 'Alien Invasion'
+        self.screen_w = 1200
+        self.screen_h = 800
+        self.FPS = 60
 
-        self.image_path = Path.cwd() / "Assets" / "images"
-        self.background_image = self.image_path / "Starbasesnow.png"
+        # Background image path
+        self.bg_file = Path.cwd() / 'Assets' / 'images' / 'Starbasesnow.png'
+
+        # Ship image and size
+        self.ship_file = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
+        self.ship_w = 40
+        self.ship_h = 60
