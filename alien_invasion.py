@@ -1,11 +1,11 @@
 """Run the Alien Invasion game."""
 
 import sys
-
 import pygame
 
 from settings import Settings
 from ship import Ship
+from arsenal import Arsenal
 
 
 class AlienInvasion:
@@ -14,8 +14,15 @@ class AlienInvasion:
     def __init__(self) -> None:
         """Initialize the game and create game resources."""
         pygame.init()
+        pygame.mixer.init()
 
         self.settings = Settings()
+
+        # Load the laser sound
+        self.laser_sound = pygame.mixer.Sound(
+            str(self.settings.laser_sound_file)
+        )
+        self.laser_sound.set_volume(self.settings.laser_volume)
 
         # Set up the game window
         self.screen = pygame.display.set_mode(
@@ -34,7 +41,10 @@ class AlienInvasion:
         )
 
         self.clock = pygame.time.Clock()
-        self.ship = Ship(self)
+
+        # Create the arsenal and ship
+        self.arsenal = Arsenal(self)
+        self.ship = Ship(self, self.arsenal)
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
@@ -60,6 +70,9 @@ class AlienInvasion:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        elif event.key == pygame.K_SPACE:
+            if self.ship.fire():
+                self.laser_sound.play()
         elif event.key == pygame.K_q:
             pygame.quit()
             sys.exit()
@@ -73,8 +86,8 @@ class AlienInvasion:
 
     def _update_screen(self) -> None:
         """Update images on the screen and flip to the new screen."""
-        self.ship.update()
         self.screen.blit(self.background, (0, 0))
+        self.ship.update()
         self.ship.draw()
         pygame.display.flip()
 

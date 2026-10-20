@@ -2,6 +2,7 @@ import pygame
 from typing import TYPE_CHECKING
 
 from settings import Settings
+from arsenal import Arsenal
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -10,12 +11,13 @@ if TYPE_CHECKING:
 class Ship:
     """Manage the player's ship."""
 
-    def __init__(self, game: "AlienInvasion") -> None:
+    def __init__(self, game: "AlienInvasion", arsenal: Arsenal) -> None:
         """Initialize the ship and set its starting position."""
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
         self.boundaries = self.screen.get_rect()
+        self.arsenal = arsenal
 
         # Load and scale the ship image
         self.image = pygame.image.load(self.settings.ship_file)
@@ -36,15 +38,27 @@ class Ship:
         self.moving_left = False
 
     def update(self) -> None:
-        """Update the ship's position based on its movement flags."""
+        """Update the ship and its arsenal."""
+        self._update_ship_movement()
+        self.arsenal.update_arsenal()
+
+    def _update_ship_movement(self) -> None:
+        """Update the ship's horizontal movement."""
+        temp_speed = self.settings.ship_speed
+
         if self.moving_right and self.rect.right < self.boundaries.right:
-            self.x += self.settings.ship_speed
+            self.x += temp_speed
 
         if self.moving_left and self.rect.left > self.boundaries.left:
-            self.x -= self.settings.ship_speed
+            self.x -= temp_speed
 
         self.rect.x = self.x
 
     def draw(self) -> None:
-        """Draw the ship at its current position."""
+        """Draw the ship and its bullets."""
+        self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
+
+    def fire(self) -> bool:
+        """Fire a bullet from the ship."""
+        return self.arsenal.fire_bullet()
