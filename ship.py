@@ -15,7 +15,7 @@ class Ship:
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
-        self.screen_rect = self.screen.get_rect()
+        self.boundaries = self.screen.get_rect()
 
         # Load and scale the ship image
         self.image = pygame.image.load(self.settings.ship_file)
@@ -26,7 +26,24 @@ class Ship:
 
         # Position the ship at the bottom center of the screen
         self.rect = self.image.get_rect()
-        self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.midbottom = self.boundaries.midbottom
+
+        # Store the ship's exact horizontal position
+        self.x = float(self.rect.x)
+
+        # Movement flags
+        self.moving_right = False
+        self.moving_left = False
+
+    def update(self) -> None:
+        """Update the ship's position based on its movement flags."""
+        if self.moving_right and self.rect.right < self.boundaries.right:
+            self.x += self.settings.ship_speed
+
+        if self.moving_left and self.rect.left > self.boundaries.left:
+            self.x -= self.settings.ship_speed
+
+        self.rect.x = self.x
 
     def draw(self) -> None:
         """Draw the ship at its current position."""
