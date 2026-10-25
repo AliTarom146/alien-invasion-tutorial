@@ -2,12 +2,11 @@
 
 import sys
 import pygame
-import pygame.sprite
 
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-from alien import Alien
+from alien_fleet import AlienFleet
 
 
 class AlienInvasion:
@@ -48,7 +47,8 @@ class AlienInvasion:
         self.arsenal = Arsenal(self)
         self.ship = Ship(self, self.arsenal)
 
-        self.alien = Alien(self, 10, 10)
+        # Create the alien fleet
+        self.alien_fleet = AlienFleet(self)
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
@@ -93,10 +93,10 @@ class AlienInvasion:
         self.screen.blit(self.background, (0, 0))
 
         self.ship.update()
-        self.alien.update()
+        self.alien_fleet.update()
 
         self.ship.draw()
-        self.alien.draw()
+        self.alien_fleet.draw()
 
         pygame.display.flip()
 
