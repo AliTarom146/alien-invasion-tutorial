@@ -1,4 +1,3 @@
-
 import pygame
 from typing import TYPE_CHECKING
 
@@ -41,8 +40,19 @@ class Alien(pygame.sprite.Sprite):
 
     def update(self) -> None:
         """Update the alien's position."""
-        self.x += self.settings.fleet_speed
+        self.check_edges()
+        self.x += (
+            self.settings.fleet_speed
+            * self.settings.fleet_direction
+        )
         self.rect.x = self.x
+
+    def check_edges(self) -> None:
+        """Check whether the alien has reached a screen edge."""
+        if self.rect.right >= self.boundaries.right:
+            self.settings.fleet_direction = -1
+        elif self.rect.left <= self.boundaries.left:
+            self.settings.fleet_direction = 1
 
     def draw(self) -> None:
         """Draw the alien on the screen."""
