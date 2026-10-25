@@ -51,8 +51,12 @@ class Alien(pygame.sprite.Sprite):
         """Check whether the alien has reached a screen edge."""
         if self.rect.right >= self.boundaries.right:
             self.settings.fleet_direction = -1
+            self.y += self.settings.alien_h
         elif self.rect.left <= self.boundaries.left:
             self.settings.fleet_direction = 1
+            self.y += self.settings.alien_h
+
+        self.rect.y = self.y
 
     def draw(self) -> None:
         """Draw the alien on the screen."""
