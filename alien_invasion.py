@@ -2,6 +2,7 @@
 
 import sys
 import pygame
+import pygame.sprite
 
 from settings import Settings
 from ship import Ship
@@ -90,9 +91,13 @@ class AlienInvasion:
     def _update_screen(self) -> None:
         """Update images on the screen and flip to the new screen."""
         self.screen.blit(self.background, (0, 0))
+
         self.ship.update()
+        self.alien.update()
+
         self.ship.draw()
         self.alien.draw()
+
         pygame.display.flip()
 
 

@@ -1,3 +1,4 @@
+
 import pygame
 from typing import TYPE_CHECKING
 
@@ -18,7 +19,6 @@ class Alien(pygame.sprite.Sprite):
         self.settings = game.settings
         self.boundaries = self.screen.get_rect()
 
-        # Load and scale the alien image
         self.image = pygame.image.load(
             str(self.settings.alien_file)
         ).convert_alpha()
@@ -28,14 +28,21 @@ class Alien(pygame.sprite.Sprite):
             (self.settings.alien_w, self.settings.alien_h)
         )
 
-        # Set the alien's starting position
         self.rect = self.image.get_rect()
+        self.set_position(x, y)
+
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
+    def set_position(self, x: int, y: int) -> None:
+        """Set the alien's starting position."""
         self.rect.x = x
         self.rect.y = y
 
-        # Store the alien's exact position
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+    def update(self) -> None:
+        """Update the alien's position."""
+        self.x += self.settings.fleet_speed
+        self.rect.x = self.x
 
     def draw(self) -> None:
         """Draw the alien on the screen."""
