@@ -40,23 +40,21 @@ class Alien(pygame.sprite.Sprite):
 
     def update(self) -> None:
         """Update the alien's position."""
-        self.check_edges()
         self.x += (
             self.settings.fleet_speed
             * self.settings.fleet_direction
         )
         self.rect.x = self.x
+        self.rect.y = self.y
 
-    def check_edges(self) -> None:
+    def check_edges(self) -> bool:
         """Check whether the alien has reached a screen edge."""
         if self.rect.right >= self.boundaries.right:
-            self.settings.fleet_direction = -1
-            self.y += self.settings.alien_h
-        elif self.rect.left <= self.boundaries.left:
-            self.settings.fleet_direction = 1
-            self.y += self.settings.alien_h
+            return True
+        if self.rect.left <= self.boundaries.left:
+            return True
 
-        self.rect.y = self.y
+        return False
 
     def draw(self) -> None:
         """Draw the alien on the screen."""

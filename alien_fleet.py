@@ -22,36 +22,46 @@ class AlienFleet:
         self.create_fleet()
 
     def create_fleet(self) -> None:
-        """Create a single row of aliens."""
+        """Create a fleet of aliens."""
         alien_w = self.settings.alien_w
+        alien_h = self.settings.alien_h
         screen_w = self.settings.screen_w
+        screen_h = self.settings.screen_h
 
-        spacing = alien_w * 2
-        fleet_w = screen_w // spacing - 1
+        spacing_x = alien_w * 2
+        spacing_y = alien_h * 2
 
-        fleet_horizontal_space = (
-            (fleet_w - 1) * spacing + alien_w
+        fleet_w = screen_w // spacing_x - 1
+        fleet_h = (screen_h // 2) // spacing_y
+
+        fleet_horizontal_space = (fleet_w - 1) * spacing_x + alien_w
+        x_offset = int((screen_w - fleet_horizontal_space) // 2)
+
+        fleet_vertical_space = (fleet_h - 1) * spacing_y + alien_h
+        y_offset = int(((screen_h // 2) - fleet_vertical_space) // 2)
+
+        self._create_fleet(
+            fleet_w, fleet_h, spacing_x, spacing_y, x_offset, y_offset
         )
-        x_offset = int(
-            (screen_w - fleet_horizontal_space) // 2
-        )
 
-        for col in range(fleet_w):
-            current_x = spacing * col + x_offset
-            self._create_alien(current_x, 10)
+    def _create_fleet(
+        self,
+        fleet_w: int,
+        fleet_h: int,
+        spacing_x: int,
+        spacing_y: int,
+        x_offset: int,
+        y_offset: int,
+    ) -> None:
+        """Create the rows and columns of aliens."""
+        alien_h = self.settings.alien_h
 
-    def calculate_fleet_size(
-        self, alien_w: int, screen_w: int
-    ) -> int:
-        """Calculate how many aliens fit in the row."""
-        fleet_w = screen_w // alien_w
+        for row in range(fleet_h):
+            current_y = spacing_y * row + y_offset
 
-        if fleet_w % 2 == 0:
-            fleet_w -= 1
-        else:
-            fleet_w -= 2
-
-        return fleet_w
+            for col in range(fleet_w):
+                current_x = spacing_x * col + x_offset
+                self._create_alien(current_x, current_y)
 
     def _create_alien(
         self, current_x: int, current_y: int
@@ -62,7 +72,22 @@ class AlienFleet:
 
     def update(self) -> None:
         """Update the alien fleet."""
-        # Aliens stay stationary while the fleet is being set up.
+        self.check_fleet_edges()
+        self.fleet.update()
+
+    def check_fleet_edges(self) -> None:
+        """Respond when an alien reaches a screen edge."""
+        for alien in self.fleet:
+            if alien.check_edges():
+                self.fleet_direction *= -1
+                self.settings.fleet_direction = self.fleet_direction
+                self.drop_fleet()
+                break
+
+    def drop_fleet(self) -> None:
+        """Move the entire fleet down."""
+        for alien in self.fleet:
+            alien.y += self.fleet_drop_speed
 
     def draw(self) -> None:
         """Draw the alien fleet."""
