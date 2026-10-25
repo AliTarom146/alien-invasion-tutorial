@@ -6,6 +6,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
+from alien import Alien
 
 
 class AlienInvasion:
@@ -45,6 +46,8 @@ class AlienInvasion:
         # Create the arsenal and ship
         self.arsenal = Arsenal(self)
         self.ship = Ship(self, self.arsenal)
+
+        self.alien = Alien(self, 10, 10)
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
@@ -89,6 +92,7 @@ class AlienInvasion:
         self.screen.blit(self.background, (0, 0))
         self.ship.update()
         self.ship.draw()
+        self.alien.draw()
         pygame.display.flip()
 
 
