@@ -25,13 +25,19 @@ class AlienFleet:
         """Create a single row of aliens."""
         alien_w = self.settings.alien_w
         screen_w = self.settings.screen_w
-        fleet_w = self.calculate_fleet_size(alien_w, screen_w)
 
-        fleet_horizontal_space = fleet_w * alien_w
-        x_offset = int((screen_w - fleet_horizontal_space) // 2)
+        spacing = alien_w * 2
+        fleet_w = screen_w // spacing - 1
+
+        fleet_horizontal_space = (
+            (fleet_w - 1) * spacing + alien_w
+        )
+        x_offset = int(
+            (screen_w - fleet_horizontal_space) // 2
+        )
 
         for col in range(fleet_w):
-            current_x = alien_w * col + x_offset
+            current_x = spacing * col + x_offset
             self._create_alien(current_x, 10)
 
     def calculate_fleet_size(
