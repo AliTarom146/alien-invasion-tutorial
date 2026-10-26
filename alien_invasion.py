@@ -107,7 +107,10 @@ class AlienInvasion:
 
         if collisions:
             self.impact_sound.play()
-            self.impact_sound.fadeout (500)
+            self.impact_sound.fadeout(500)
+
+        if not self.alien_fleet.fleet:
+            self.alien_fleet.create_fleet()
 
     def reset_level(self) -> None:
         """Reset the bullets, aliens, and ship."""
