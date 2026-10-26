@@ -23,7 +23,13 @@ class AlienInvasion:
         self.laser_sound = pygame.mixer.Sound(
             str(self.settings.laser_sound_file)
         )
-        self.laser_sound.set_volume(self.settings.laser_volume)
+        self.laser_sound.set_volume(0.7)
+
+        # Load the impact sound
+        self.impact_sound = pygame.mixer.Sound(
+            str(self.settings.impact_sound_file)
+        )
+        self.impact_sound.set_volume(0.7)
 
         # Set up the game window
         self.screen = pygame.display.set_mode(
@@ -95,7 +101,13 @@ class AlienInvasion:
         elif self.alien_fleet.check_fleet_bottom():
             self.reset_level()
 
-        self.alien_fleet.check_collisions(self.arsenal.arsenal)
+        collisions = self.alien_fleet.check_collisions(
+            self.arsenal.arsenal
+        )
+
+        if collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout (500)
 
     def reset_level(self) -> None:
         """Reset the bullets, aliens, and ship."""

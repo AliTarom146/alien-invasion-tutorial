@@ -33,6 +33,10 @@ class Settings:
         self.bullet_h = 80
         self.bullet_amount = 5
         self.laser_volume = 0.5
+        self.impact_sound_file = (
+            Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
+        )
+        self.impact_volume = 0.5
 
         # Alien settings
         self.alien_file = (Path.cwd() / 'Assets' / 'images' / 'enemy_4.png')
@@ -40,4 +44,4 @@ class Settings:
         self.alien_h = 40
         self.fleet_speed = 2
         self.fleet_direction = 1
-        self.fleet_drop_speed = 10
+        self.fleet_drop_speed = 40
