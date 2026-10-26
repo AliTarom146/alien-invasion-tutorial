@@ -54,6 +54,19 @@ class Ship:
 
         self.rect.x = self.x
 
+    def center_ship(self) -> None:
+        """Center the ship at the bottom of the screen."""
+        self.rect.midbottom = self.boundaries.midbottom
+        self.x = float(self.rect.x)
+
+    def check_collisions(self, other_group) -> bool:
+        """Check whether the ship collides with another sprite."""
+        if pygame.sprite.spritecollideany(self, other_group):
+            self.center_ship()
+            return True
+
+        return False
+
     def draw(self) -> None:
         """Draw the ship and its bullets."""
         self.arsenal.draw()

@@ -32,7 +32,7 @@ class AlienFleet:
         spacing_y = alien_h * 2
 
         fleet_w = screen_w // spacing_x - 1
-        fleet_h = (screen_h // 2) // spacing_y
+        fleet_h = (screen_h // 2) // spacing_y - 1
 
         fleet_horizontal_space = (fleet_w - 1) * spacing_x + alien_w
         x_offset = int((screen_w - fleet_horizontal_space) // 2)
@@ -83,6 +83,23 @@ class AlienFleet:
                 self.settings.fleet_direction = self.fleet_direction
                 self.drop_fleet()
                 break
+
+    def check_fleet_bottom(self) -> bool:
+        """Check whether any alien has reached the bottom."""
+        for alien in self.fleet:
+            if alien.rect.bottom >= self.game.screen.get_rect().bottom:
+                return True
+
+        return False
+
+    def check_collisions(self, other_group):
+        """Check for collisions between bullets and aliens."""
+        return pygame.sprite.groupcollide(
+            self.fleet,
+            other_group,
+            True,
+            True
+        )
 
     def drop_fleet(self) -> None:
         """Move the entire fleet down."""

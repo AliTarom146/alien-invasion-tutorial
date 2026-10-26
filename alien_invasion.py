@@ -88,12 +88,30 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def _check_collisions(self) -> None:
+        """Check for collisions."""
+        if self.ship.check_collisions(self.alien_fleet.fleet):
+            self.reset_level()
+        elif self.alien_fleet.check_fleet_bottom():
+            self.reset_level()
+
+        self.alien_fleet.check_collisions(self.arsenal.arsenal)
+
+    def reset_level(self) -> None:
+        """Reset the bullets, aliens, and ship."""
+        self.arsenal.arsenal.empty()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
+        self.ship.center_ship()
+
     def _update_screen(self) -> None:
         """Update images on the screen and flip to the new screen."""
         self.screen.blit(self.background, (0, 0))
 
         self.ship.update()
         self.alien_fleet.update()
+
+        self._check_collisions()
 
         self.ship.draw()
         self.alien_fleet.draw()
