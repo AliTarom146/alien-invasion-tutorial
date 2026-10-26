@@ -7,6 +7,7 @@ from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
 from alien_fleet import AlienFleet
+from game_stats import GameStats
 
 
 class AlienInvasion:
@@ -18,6 +19,8 @@ class AlienInvasion:
         pygame.mixer.init()
 
         self.settings = Settings()
+        self.stats = GameStats(self.settings.ship_limit)
+        self.game_active = True
 
         # Load the laser sound
         self.laser_sound = pygame.mixer.Sound(
@@ -38,33 +41,30 @@ class AlienInvasion:
         pygame.display.set_caption(self.settings.name)
 
         # Load the background image
-        self.background = pygame.image.load(
-            str(self.settings.bg_file)
-        ).convert()
-
+        self.background = pygame.image.load(self.settings.bg_file)
         self.background = pygame.transform.scale(
             self.background,
             (self.settings.screen_w, self.settings.screen_h)
         )
 
-        self.clock = pygame.time.Clock()
-
-        # Create the arsenal and ship
+        # Create the ship, bullets, and alien fleet
         self.arsenal = Arsenal(self)
         self.ship = Ship(self, self.arsenal)
-
-        # Create the alien fleet
         self.alien_fleet = AlienFleet(self)
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
+        clock = pygame.time.Clock()
+
         while True:
+            clock.tick(self.settings.FPS)
             self._check_events()
-            self._update_screen()
-            self.clock.tick(self.settings.FPS)
+
+            if self.game_active:
+                self._update_screen()
 
     def _check_events(self) -> None:
-        """Respond to key presses and other events."""
+        """Respond to keyboard and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -81,7 +81,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_SPACE:
-            if self.ship.fire():
+            if self.game_active and self.ship.fire():
                 self.laser_sound.play()
         elif event.key == pygame.K_q:
             pygame.quit()
@@ -97,9 +97,9 @@ class AlienInvasion:
     def _check_collisions(self) -> None:
         """Check for collisions."""
         if self.ship.check_collisions(self.alien_fleet.fleet):
-            self.reset_level()
+            self._check_game_status()
         elif self.alien_fleet.check_fleet_bottom():
-            self.reset_level()
+            self._check_game_status()
 
         collisions = self.alien_fleet.check_collisions(
             self.arsenal.arsenal
@@ -112,6 +112,15 @@ class AlienInvasion:
         if not self.alien_fleet.fleet:
             self.alien_fleet.create_fleet()
 
+    def _check_game_status(self) -> None:
+        """Check whether the game should continue."""
+        self.stats.ships_left -= 1
+
+        if self.stats.ships_left > 0:
+            self.reset_level()
+        else:
+            self.game_active = False
+
     def reset_level(self) -> None:
         """Reset the bullets, aliens, and ship."""
         self.arsenal.arsenal.empty()
@@ -122,15 +131,11 @@ class AlienInvasion:
     def _update_screen(self) -> None:
         """Update images on the screen and flip to the new screen."""
         self.screen.blit(self.background, (0, 0))
-
         self.ship.update()
         self.alien_fleet.update()
-
         self._check_collisions()
-
         self.ship.draw()
         self.alien_fleet.draw()
-
         pygame.display.flip()
 
 
