@@ -87,6 +87,7 @@ class AlienInvasion:
 
     def restart_game(self) -> None:
         """Restart the game."""
+        self.settings.initialize_dynamic_settings()
         self.stats = GameStats(self.settings.ship_limit)
         self.reset_level()
         self.game_active = True
@@ -131,6 +132,7 @@ class AlienInvasion:
             self.impact_sound.fadeout(500)
 
         if not self.alien_fleet.fleet and self.game_active:
+            self.settings.increase_difficulty()
             self.alien_fleet.create_fleet()
 
     def _check_game_status(self) -> None:
