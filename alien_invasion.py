@@ -20,7 +20,7 @@ class AlienInvasion:
         pygame.mixer.init()
 
         self.settings = Settings()
-        self.stats = GameStats(self.settings.ship_limit)
+        self.stats = GameStats(self)
         self.game_active = True
 
         # Load the laser sound
@@ -69,6 +69,7 @@ class AlienInvasion:
         """Respond to keyboard and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.stats.save_scores()
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -88,7 +89,7 @@ class AlienInvasion:
     def restart_game(self) -> None:
         """Restart the game."""
         self.settings.initialize_dynamic_settings()
-        self.stats = GameStats(self.settings.ship_limit)
+        self.stats = GameStats(self)
         self.reset_level()
         self.game_active = True
         pygame.mouse.set_visible(False)
@@ -106,6 +107,7 @@ class AlienInvasion:
             if self.ship.fire():
                 self.laser_sound.play()
         elif event.key == pygame.K_q:
+            self.stats.save_scores()
             pygame.quit()
             sys.exit()
 
@@ -130,8 +132,10 @@ class AlienInvasion:
         if collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
+            self.stats.update(collisions)
 
         if not self.alien_fleet.fleet and self.game_active:
+            self.stats.update_level()
             self.settings.increase_difficulty()
             self.alien_fleet.create_fleet()
 
