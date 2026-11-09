@@ -38,6 +38,19 @@ class Settings:
         )
         self.impact_volume = 0.5
 
+        # Font file
+        self.font_file = (
+            Path.cwd() / 'Assets' / 'Fonts' /
+            'Silkscreen' / 'Silkscreen-Bold.ttf'
+        )
+
+        # Button settings
+        self.button_w = 200
+        self.button_h = 50
+        self.button_color = (0, 135, 50)
+        self.text_color = (255, 255, 255)
+        self.button_font_size = 48
+
         # Alien settings
         self.alien_file = (Path.cwd() / 'Assets' / 'images' / 'enemy_4.png')
         self.alien_w = 40
