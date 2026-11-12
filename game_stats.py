@@ -10,6 +10,7 @@ class GameStats:
         self.ships_left = self.settings.ship_limit
 
         self.score = 0
+        self.max_score = 0
         self.level = 1
 
         self.path = self.settings.scores_file
@@ -39,14 +40,22 @@ class GameStats:
             print("Could not save the high score.")
 
     def update(self, collisions):
-        """Update the score and high score."""
+        """Update the score and high scores."""
         for aliens in collisions.values():
-            self.score += len(aliens) * self.settings.alien_points
+            self.score += (
+                len(aliens) * self.settings.alien_points
+            )
 
+        self.update_max_score()
         self.update_high_score()
 
+    def update_max_score(self):
+        """Update the maximum score for this session."""
+        if self.score > self.max_score:
+            self.max_score = self.score
+
     def update_high_score(self):
-        """Update the high score if the current score is higher."""
+        """Update the all-time high score."""
         if self.score > self.high_score:
             self.high_score = self.score
 

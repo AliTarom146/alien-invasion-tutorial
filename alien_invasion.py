@@ -9,6 +9,7 @@ from arsenal import Arsenal
 from alien_fleet import AlienFleet
 from game_stats import GameStats
 from button import Button
+from hud import HUD
 
 
 class AlienInvasion:
@@ -21,7 +22,7 @@ class AlienInvasion:
 
         self.settings = Settings()
         self.stats = GameStats(self)
-        self.game_active = True
+        self.game_active = False
 
         # Load the laser sound
         self.laser_sound = pygame.mixer.Sound(
@@ -41,8 +42,9 @@ class AlienInvasion:
         )
         pygame.display.set_caption(self.settings.name)
 
-        # Create the Play button
+        # Create the Play button and HUD
         self.play_button = Button(self, "Play")
+        self.hud = HUD(self)
 
         # Load the background image
         self.background = pygame.image.load(self.settings.bg_file)
@@ -90,6 +92,8 @@ class AlienInvasion:
         """Restart the game."""
         self.settings.initialize_dynamic_settings()
         self.stats = GameStats(self)
+        self.hud.stats = self.stats
+        self.hud.update()
         self.reset_level()
         self.game_active = True
         pygame.mouse.set_visible(False)
@@ -133,19 +137,23 @@ class AlienInvasion:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             self.stats.update(collisions)
+            self.hud.update()
 
         if not self.alien_fleet.fleet and self.game_active:
             self.stats.update_level()
             self.settings.increase_difficulty()
+            self.hud.update_level()
             self.alien_fleet.create_fleet()
 
     def _check_game_status(self) -> None:
         """Check whether the game should continue."""
         self.stats.ships_left -= 1
+        self.hud.update()
 
         if self.stats.ships_left > 0:
             self.reset_level()
         else:
+            self.stats.save_scores()
             self.game_active = False
             pygame.mouse.set_visible(True)
 
@@ -159,6 +167,8 @@ class AlienInvasion:
     def _update_screen(self) -> None:
         """Update images on the screen and flip to the new screen."""
         self.screen.blit(self.background, (0, 0))
+
+        self.hud.draw()
 
         if self.game_active:
             self.ship.update()
