@@ -22,7 +22,7 @@ class Settings:
             self.base_dir / "Assets" / "images" / "player_ship.png"
         )
         self.bullet_file = (
-            Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+            self.base_dir / "Assets" / "images" / "laser_projectile.png"
         )
         self.alien_file = (
             Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
@@ -78,8 +78,8 @@ class Settings:
         self.ship_speed = 5
 
         self.bullet_speed = 7
-        self.bullet_w = 25
-        self.bullet_h = 80
+        self.bullet_w = 32
+        self.bullet_h = 32
         self.bullet_amount = 5
 
         self.fleet_speed = 2

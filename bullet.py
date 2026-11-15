@@ -1,3 +1,11 @@
+"""
+Program Name: Alien Invasion - Track 2
+Author: Ali Tarom
+Purpose: Manage the laser projectiles fired by the player's ship.
+Starter Code Links: https://github.com/RedBeard41/alien_Invasion_starter
+Date Updated: November 14, 2026
+"""
+
 import pygame
 from typing import TYPE_CHECKING
 
