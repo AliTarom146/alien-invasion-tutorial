@@ -11,9 +11,12 @@ class Settings:
         self.screen_h = 800
         self.FPS = 60
 
+        # Project folder
+        self.base_dir = Path(__file__).resolve().parent
+
         # Image and sound files
         self.bg_file = (
-            Path.cwd() / 'Assets' / 'images' / 'Starbasesnow.png'
+            self.base_dir / "Assets" / "images" / "space_background.png"
         )
         self.ship_file = (
             Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
