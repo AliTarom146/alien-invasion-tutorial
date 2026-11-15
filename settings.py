@@ -1,3 +1,11 @@
+"""
+Program Name: Alien Invasion - Track 2
+Author: Ali Tarom
+Purpose: Store the settings for the Milestone 1 space shooter.
+Starter Code Links: https://github.com/RedBeard41/alien_Invasion_starter
+Date Updated: November 14, 2026
+"""
+
 from pathlib import Path
 
 
@@ -6,7 +14,7 @@ class Settings:
 
     def __init__(self) -> None:
         """Initialize the game's settings."""
-        self.name: str = 'Alien Invasion'
+        self.name: str = "Alien Invasion - Track 2"
         self.screen_w = 1200
         self.screen_h = 800
         self.FPS = 60
@@ -25,27 +33,27 @@ class Settings:
             self.base_dir / "Assets" / "images" / "laser_projectile.png"
         )
         self.alien_file = (
-            Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
+            self.base_dir / "Assets" / "images" / "enemy_4.png"
         )
 
         self.laser_sound_file = (
             self.base_dir / "Assets" / "sound" / "laser_fire.wav"
         )
         self.impact_sound_file = (
-            Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
+            self.base_dir / "Assets" / "sound" / "impactSound.mp3"
         )
         self.laser_volume = 0.5
         self.impact_volume = 0.5
 
         # Score file
         self.scores_file = (
-            Path.cwd() / 'Assets' / 'file' / 'scores.json'
+            self.base_dir / "Assets" / "file" / "scores.json"
         )
 
         # Font file
         self.font_file = (
-            Path.cwd() / 'Assets' / 'Fonts' /
-            'Silkscreen' / 'Silkscreen-Bold.ttf'
+            self.base_dir / "Assets" / "Fonts" /
+            "Silkscreen" / "Silkscreen-Bold.ttf"
         )
 
         # Button settings
