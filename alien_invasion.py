@@ -53,7 +53,13 @@ class AlienInvasion:
             (self.settings.screen_w, self.settings.screen_h)
         )
 
-        # Create the ship, bullets, and alien fleet
+        # Load the laser firing sound
+        self.laser_sound = pygame.mixer.Sound(
+            str(self.settings.laser_sound_file)
+        )
+        self.laser_sound.set_volume(0.7)
+
+        # Create the ship and its arsenal
         self.arsenal = Arsenal(self)
         self.ship = Ship(self, self.arsenal)
         self.alien_fleet = AlienFleet(self)

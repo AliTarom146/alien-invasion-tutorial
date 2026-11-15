@@ -29,7 +29,7 @@ class Settings:
         )
 
         self.laser_sound_file = (
-            Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+            self.base_dir / "Assets" / "sound" / "laser_fire.wav"
         )
         self.impact_sound_file = (
             Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
