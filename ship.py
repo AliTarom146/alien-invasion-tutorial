@@ -1,7 +1,14 @@
+"""
+Program Name: Alien Invasion - Track 2
+Author: Ali Tarom
+Purpose: Manage the player's ship, movement, and firing.
+Starter Code Links: https://github.com/RedBeard41/alien_Invasion_starter
+Date Updated: November 14, 2026
+"""
+
 import pygame
 from typing import TYPE_CHECKING
 
-from settings import Settings
 from arsenal import Arsenal
 
 if TYPE_CHECKING:
@@ -20,7 +27,9 @@ class Ship:
         self.arsenal = arsenal
 
         # Load and scale the ship image
-        self.image = pygame.image.load(self.settings.ship_file)
+        self.image = pygame.image.load(
+            self.settings.ship_file
+        ).convert_alpha()
         self.image = pygame.transform.scale(
             self.image,
             (self.settings.ship_w, self.settings.ship_h)

@@ -19,7 +19,7 @@ class Settings:
             self.base_dir / "Assets" / "images" / "space_background.png"
         )
         self.ship_file = (
-            Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
+            self.base_dir / "Assets" / "images" / "player_ship.png"
         )
         self.bullet_file = (
             Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
